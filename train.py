@@ -18,7 +18,7 @@ from model.training import train_and_evaluate
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_dir', default='experiments/test',
                     help="Experiment directory containing params.json")
-parser.add_argument('--data_dir', default='data/64x64_SIGNS',
+parser.add_argument('--data_dir', default='data/32x32_CIFAR',
                     help="Directory containing the dataset")
 parser.add_argument('--restore_from', default=None,
                     help="Optional, directory or file containing weights to reload before training")
@@ -46,22 +46,28 @@ if __name__ == '__main__':
     # Create the input data pipeline
     logging.info("Creating the datasets...")
     data_dir = args.data_dir
-    train_data_dir = os.path.join(data_dir, "train_signs")
-    dev_data_dir = os.path.join(data_dir, "dev_signs")
+    train_data_dir = os.path.join(data_dir, "train_imgs")
+    dev_data_dir = os.path.join(data_dir, "dev_imgs")
 
-    # Get the filenames from the train and dev sets
-    train_filenames = [os.path.join(train_data_dir, f) for f in os.listdir(train_data_dir)
-                       if f.endswith('.jpg')]
-    eval_filenames = [os.path.join(dev_data_dir, f) for f in os.listdir(dev_data_dir)
-                      if f.endswith('.jpg')]
+    # # Get the filenames from the train and dev sets
+    # train_filenames = [os.path.join(train_data_dir, f) for f in os.listdir(train_data_dir)
+    #                    if f.endswith('.jpg')]
+    # eval_filenames = [os.path.join(dev_data_dir, f) for f in os.listdir(dev_data_dir)
+    #                   if f.endswith('.jpg')]
 
-    # Labels will be between 0 and 5 included (6 classes in total)
-    train_labels = [int(f.split('/')[-1][0]) for f in train_filenames]
-    eval_labels = [int(f.split('/')[-1][0]) for f in eval_filenames]
+    # # Labels will be between 0 and 5 included (6 classes in total)
+    # train_labels = [int(f.split('/')[-1][0]) for f in train_filenames]
+    # eval_labels = [int(f.split('/')[-1][0]) for f in eval_filenames]
+
+    train_inputs = np.load(os.path.join(train_data_dir, "train_inputs.npy"))
+    train_labels = np.load(os.path.join(train_data_dir, "train_labels.npy"))
+
+    eval_inputs = np.load(os.path.join(dev_data_dir, "valid_inputs.npy"))
+    eval_labels = np.load(os.path.join(dev_data_dir, "valid_labels.npy"))
 
     # Specify the sizes of the dataset we train on and evaluate on
-    params.train_size = len(train_filenames)
-    params.eval_size = len(eval_filenames)
+    params.train_size = len(train_inputs.shape[0])
+    params.eval_size = len(eval_labels.shape[0])
 
     # Create the two iterators over the two datasets
     train_inputs = input_fn(True, train_filenames, train_labels, params)
