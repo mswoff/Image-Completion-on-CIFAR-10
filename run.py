@@ -115,10 +115,6 @@ if __name__ == '__main__':
 
 
 
-    # sess.run(init)
-    # a = sess.run(loss, {X: np.random.randn(4,32,32,3), Y: np.random.randn(4, 8 * 8)})
-    # print(str(a))
-
     num_epochs = 100
     minibatch_size = 1000
  
@@ -144,10 +140,6 @@ if __name__ == '__main__':
                 minibatch_Y = minibatch_Y.reshape(minibatch_Y.shape[0], 8*8*3)
 
                 _ , temp_cost = sess.run([optimizer, loss], feed_dict={X: minibatch_X, Y: minibatch_Y})
-                # opt = GradientDescentOptimizer(learning_rate=0.1)
-                # opt_op = opt.minimize(loss)
-                # opt_op.run()
-                # print(loss)
                 
                 minibatch_cost += temp_cost / num_minibatches
 
