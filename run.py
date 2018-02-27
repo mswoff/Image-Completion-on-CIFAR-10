@@ -5,6 +5,7 @@ import os
 import random
 
 import tensorflow as tf
+from tensorflow.python.framework import ops
 import numpy as np
 
 from model.input_fn import input_fn
@@ -64,7 +65,6 @@ def forward_prop(X, parameters):
     Z4 = tf.nn.conv2d(A3, W4, strides=[1, 1, 1, 1], padding="VALID")
     A4 = tf.nn.relu(Z4)
     F = tf.contrib.layers.flatten(A4)
-    print(F)
 
     return F
 
@@ -79,24 +79,12 @@ def random_mini_batches(X_train, Y_train, minibatch_size, seed):
     for i in range(int(X_train.shape[0]/minibatch_size)):
         x_batch = X_train[minibatch_size*i: minibatch_size*(i+1)]
         y_batch = Y_train[minibatch_size*i: minibatch_size*(i+1)]
+        batches.append((x_batch, y_batch))
 
     return batches
 
 
 if __name__ == '__main__':
-
-    # with tf.Session() as sess:
-    #     X, Y = create_placeholders(32, 32, 3, 64)
-    #     parameters = init_params()
-    #     F = forward_prop(X, parameters)
-    #     loss = tf.losses.mean_squared_error(labels=Y, predictions=F)
-    #     init = tf.global_variables_initializer()
-    #     sess.run(init)
-    #     a = sess.run(loss, {X: np.random.randn(4,32,32,3), Y: np.random.randn(4, 8 * 8)})
-    #     print(str(a))
-
-
-
 
 
     X_train = np.load("data/32x32_CIFAR/train_imgs/X_train.npy")
@@ -109,7 +97,9 @@ if __name__ == '__main__':
     m, n_yH, n_yW, n_C0 = Y_train.shape
 
 
-    
+    ops.reset_default_graph()
+    tf.set_random_seed(1)
+    seed = 3
 
     X, Y = create_placeholders(32, 32, 3, 64 * 3)
 
@@ -119,7 +109,7 @@ if __name__ == '__main__':
 
     loss = tf.losses.mean_squared_error(labels=Y, predictions=preds)
 
-    optimizer = tf.train.AdamOptimizer(learning_rate= .001).minimize(loss)
+    optimizer = tf.train.AdamOptimizer(learning_rate= .01).minimize(loss)
 
     init = tf.global_variables_initializer()
 
@@ -135,7 +125,7 @@ if __name__ == '__main__':
 
     with tf.Session() as sess:
         sess.run(init)
-        seed = 1
+        
 
         for epoch in range(num_epochs):
 
@@ -147,12 +137,17 @@ if __name__ == '__main__':
             minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
 
 
+
             for minibatch in minibatches:
 
                 (minibatch_X, minibatch_Y) = minibatch
                 minibatch_Y = minibatch_Y.reshape(minibatch_Y.shape[0], 8*8*3)
 
                 _ , temp_cost = sess.run([optimizer, loss], feed_dict={X: minibatch_X, Y: minibatch_Y})
+                # opt = GradientDescentOptimizer(learning_rate=0.1)
+                # opt_op = opt.minimize(loss)
+                # opt_op.run()
+                # print(loss)
                 
                 minibatch_cost += temp_cost / num_minibatches
 
