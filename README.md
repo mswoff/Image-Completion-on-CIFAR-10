@@ -13,14 +13,23 @@
     can restore model from a previous training instance with -r "path to .ckpt"
 
 6. Run predict_images.py to output random images and the model's predictions
-  specify model with -m
-  specify model saved path with -r "path to .ckpt"
-  specify number of image with -n
-  specify seed to use for random image generation -s
-  specify train or development images with -v
+  
+    specify model with -m
+  
+    specify model saved path with -r "path to .ckpt"
+  
+    specify number of image with -n
+  
+    specify seed to use for random image generation -s
+    
+    specify train or development images with -v
   
 7. Run evaluate_model.py to test the models on the test set and output sample predictions
-  specify model with -m
-  specify model saved path with -r "path to .ckpt"
-  specify number of image with -n
-  specify seed to use for random image generation -s
+  
+    specify model with -m
+  
+    specify model saved path with -r "path to .ckpt"
+  
+    specify number of image with -n
+  
+    specify seed to use for random image generation -s
