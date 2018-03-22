@@ -3,11 +3,10 @@
 3. Create folders data/32x32_CIFAR, data/32x32_CIFAR/test_imgs, data/32x32_CIFAR/train_imgs, data/32x32_CIFAR/valid_imgs
 4. Run build_dataset.py
 5. Run run.py to train model
-
-  specify model with -m
-  specify learning rate with -l
-  specify number of epochs to train for with -n
-  can restore model from a previous training instance with -r "path to .ckpt"
+    a. specify model with -m
+    b. specify learning rate with -l
+    c. specify number of epochs to train for with -n
+    d. can restore model from a previous training instance with -r "path to .ckpt"
 
 6. Run predict_images.py to output random images and the model's predictions
   specify model with -m
