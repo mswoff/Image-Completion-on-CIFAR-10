@@ -3,6 +3,7 @@
 3. Create folders data/32x32_CIFAR, data/32x32_CIFAR/test_imgs, data/32x32_CIFAR/train_imgs, data/32x32_CIFAR/valid_imgs
 4. Run build_dataset.py
 5. Run run.py to train model
+
   specify model with -m
   specify learning rate with -l
   specify number of epochs to train for with -n
